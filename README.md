@@ -1,0 +1,2 @@
+# sparss
+Sparse Table Compressor
