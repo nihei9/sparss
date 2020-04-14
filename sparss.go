@@ -63,7 +63,7 @@ type rowInfo struct {
 	nonEmptyCol   []int
 }
 
-func (c *RDCompressor) Run(origTable []int, rowLen int) (*RDResult, error) {
+func (c *RDCompressor) Compress(origTable []int, rowLen int) (*RDResult, error) {
 	if len(origTable) <= 0 {
 		return nil, fmt.Errorf("len(origTable) must be >= 1")
 	}

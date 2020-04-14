@@ -87,7 +87,7 @@ func TestCompressor_Run(t *testing.T) {
 			if err != nil {
 				t.Fatalf("failed to call NewRDCompressor(); error: %v", err)
 			}
-			result, err := comp.Run(tt.origTable, tt.rowLen)
+			result, err := comp.Compress(tt.origTable, tt.rowLen)
 			if err != nil {
 				t.Fatalf("failed to Compress(); error: %v", err)
 			}
@@ -114,7 +114,7 @@ func TestCompressor_Run(t *testing.T) {
 		if err != nil {
 			t.Fatalf("failed to call NewRDCompressor(); error: %v", err)
 		}
-		result, err := comp.Run([]int{
+		result, err := comp.Compress([]int{
 			x, 1, x,
 			1, x, x,
 			x, 1, 1,
