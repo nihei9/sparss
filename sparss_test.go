@@ -87,7 +87,7 @@ func TestCompressor_Run(t *testing.T) {
 			if err != nil {
 				t.Fatalf("failed to call NewRDCompressor(); error: %v", err)
 			}
-			table, err := NewTable(tt.origTable, tt.rowLen, EmptyEntry(tt.emptyValue))
+			table, err := NewTable(tt.origTable, tt.rowLen, EmptyValue(tt.emptyValue))
 			if err != nil {
 				t.Fatalf("failed to call NewTable(); error: %v", err)
 			}
