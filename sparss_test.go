@@ -7,7 +7,7 @@ import (
 )
 
 func TestCompressor_Run(t *testing.T) {
-	const x = DefaultEmptyEntry
+	const x = DefaultEmptyValue
 
 	tests := []struct {
 		rowLen     int
@@ -96,7 +96,7 @@ func TestCompressor_Run(t *testing.T) {
 				t.Fatalf("failed to Compress(); error: %v", err)
 			}
 			t.Logf("result (length: %v): %+v", len(result.Entries), prettyUp(result.Entries, x, tt.emptyValue))
-			t.Logf("bounds (length: %v): %+v", len(result.Bounds), prettyUp(result.Bounds, x, ForbiddenEntry))
+			t.Logf("bounds (length: %v): %+v", len(result.Bounds), prettyUp(result.Bounds, x, ForbiddenValue))
 			t.Logf("row displacement (length: %v): %+v", len(result.RowDisplacement), result.RowDisplacement)
 
 			for i, expected := range tt.origTable {

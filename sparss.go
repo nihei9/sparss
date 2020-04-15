@@ -6,9 +6,8 @@ import (
 )
 
 const (
-	DefaultEmptyEntry = int(0)
-	ForbiddenEntry    = maxInt
-	MaxBoundsIndex    = maxInt - 1
+	DefaultEmptyValue = int(0)
+	ForbiddenValue    = maxInt
 
 	maxUInt = ^uint(0)
 	maxInt  = int(maxUInt >> 1)
@@ -42,7 +41,7 @@ func NewTable(entries []int, rowLen int, options ...TableOption) (*Table, error)
 		numOfRows:    numOfRows,
 		numOfCols:    numOfCols,
 		rowLen:       rowLen,
-		emptyEntry:   DefaultEmptyEntry,
+		emptyEntry:   DefaultEmptyValue,
 	}
 
 	for _, option := range options {
@@ -132,7 +131,7 @@ func (c *RDCompressor) Compress(origTable *Table) (*RDResult, error) {
 	{
 		for i := 0; i < origTable.numOfEntries; i++ {
 			entries[i] = origTable.emptyEntry
-			bounds[i] = ForbiddenEntry
+			bounds[i] = ForbiddenValue
 		}
 
 		nextRowDisplacement := 0
