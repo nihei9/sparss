@@ -7,7 +7,7 @@ import (
 )
 
 func TestCompressor_Run(t *testing.T) {
-	const x = DefaultEmptyEntry
+	const x = DefaultEmptyValue
 
 	tests := []struct {
 		rowLen     int
@@ -83,16 +83,20 @@ func TestCompressor_Run(t *testing.T) {
 			t.Logf("empty value: %v", tt.emptyValue)
 			t.Logf("orig (length: %v): %+v", len(tt.origTable), prettyUp(tt.origTable, tt.rowLen, tt.emptyValue))
 
-			comp, err := NewRDCompressor(EmptyEntry(tt.emptyValue))
+			comp, err := NewRDCompressor()
 			if err != nil {
 				t.Fatalf("failed to call NewRDCompressor(); error: %v", err)
 			}
-			result, err := comp.Run(tt.origTable, tt.rowLen)
+			table, err := NewTable(tt.origTable, tt.rowLen, EmptyEntry(tt.emptyValue))
+			if err != nil {
+				t.Fatalf("failed to call NewTable(); error: %v", err)
+			}
+			result, err := comp.Compress(table)
 			if err != nil {
 				t.Fatalf("failed to Compress(); error: %v", err)
 			}
 			t.Logf("result (length: %v): %+v", len(result.Entries), prettyUp(result.Entries, x, tt.emptyValue))
-			t.Logf("bounds (length: %v): %+v", len(result.Bounds), prettyUp(result.Bounds, x, ForbiddenEntry))
+			t.Logf("bounds (length: %v): %+v", len(result.Bounds), prettyUp(result.Bounds, x, ForbiddenValue))
 			t.Logf("row displacement (length: %v): %+v", len(result.RowDisplacement), result.RowDisplacement)
 
 			for i, expected := range tt.origTable {
@@ -114,11 +118,15 @@ func TestCompressor_Run(t *testing.T) {
 		if err != nil {
 			t.Fatalf("failed to call NewRDCompressor(); error: %v", err)
 		}
-		result, err := comp.Run([]int{
+		table, err := NewTable([]int{
 			x, 1, x,
 			1, x, x,
 			x, 1, 1,
 		}, 3)
+		if err != nil {
+			t.Fatalf("failed to call NewTable(); error: %v", err)
+		}
+		result, err := comp.Compress(table)
 		if err != nil {
 			t.Fatalf("failed to call Run(); error: %v", err)
 		}
