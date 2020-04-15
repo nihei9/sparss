@@ -83,11 +83,15 @@ func TestCompressor_Run(t *testing.T) {
 			t.Logf("empty value: %v", tt.emptyValue)
 			t.Logf("orig (length: %v): %+v", len(tt.origTable), prettyUp(tt.origTable, tt.rowLen, tt.emptyValue))
 
-			comp, err := NewRDCompressor(EmptyEntry(tt.emptyValue))
+			comp, err := NewRDCompressor()
 			if err != nil {
 				t.Fatalf("failed to call NewRDCompressor(); error: %v", err)
 			}
-			result, err := comp.Compress(tt.origTable, tt.rowLen)
+			table, err := NewTable(tt.origTable, tt.rowLen, EmptyEntry(tt.emptyValue))
+			if err != nil {
+				t.Fatalf("failed to call NewTable(); error: %v", err)
+			}
+			result, err := comp.Compress(table)
 			if err != nil {
 				t.Fatalf("failed to Compress(); error: %v", err)
 			}
@@ -114,11 +118,15 @@ func TestCompressor_Run(t *testing.T) {
 		if err != nil {
 			t.Fatalf("failed to call NewRDCompressor(); error: %v", err)
 		}
-		result, err := comp.Compress([]int{
+		table, err := NewTable([]int{
 			x, 1, x,
 			1, x, x,
 			x, 1, 1,
 		}, 3)
+		if err != nil {
+			t.Fatalf("failed to call NewTable(); error: %v", err)
+		}
+		result, err := comp.Compress(table)
 		if err != nil {
 			t.Fatalf("failed to call Run(); error: %v", err)
 		}
