@@ -6,7 +6,7 @@ Sparse Table Compressor
 
 ## Requirement
 
-Go >=13
+Go >=1.13
 
 ## Refelence
 
