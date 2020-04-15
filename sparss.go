@@ -56,7 +56,7 @@ func NewTable(entries []int, rowLen int, options ...TableOption) (*Table, error)
 
 type TableOption func(t *Table) error
 
-func EmptyEntry(e int) TableOption {
+func EmptyValue(e int) TableOption {
 	return func(t *Table) error {
 		t.emptyEntry = e
 		return nil
