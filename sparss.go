@@ -19,7 +19,7 @@ type Table struct {
 	numOfRows    int
 	numOfCols    int
 	rowLen       int
-	emptyEntry   int
+	emptyValue   int
 }
 
 func NewTable(entries []int, rowLen int, options ...TableOption) (*Table, error) {
@@ -41,7 +41,7 @@ func NewTable(entries []int, rowLen int, options ...TableOption) (*Table, error)
 		numOfRows:    numOfRows,
 		numOfCols:    numOfCols,
 		rowLen:       rowLen,
-		emptyEntry:   DefaultEmptyValue,
+		emptyValue:   DefaultEmptyValue,
 	}
 
 	for _, option := range options {
@@ -58,7 +58,7 @@ type TableOption func(t *Table) error
 
 func EmptyValue(e int) TableOption {
 	return func(t *Table) error {
-		t.emptyEntry = e
+		t.emptyValue = e
 		return nil
 	}
 }
@@ -112,7 +112,7 @@ func (c *RDCompressor) Compress(origTable *Table) (*RDResult, error) {
 				col = 0
 				rowInfo[row].rowNum = row
 			}
-			if v != origTable.emptyEntry {
+			if v != origTable.emptyValue {
 				rowInfo[row].nonEmptyCount++
 				rowInfo[row].nonEmptyCol = append(rowInfo[row].nonEmptyCol, col)
 			}
@@ -130,7 +130,7 @@ func (c *RDCompressor) Compress(origTable *Table) (*RDResult, error) {
 	rowDisplacement := make([]int, origTable.numOfRows)
 	{
 		for i := 0; i < origTable.numOfEntries; i++ {
-			entries[i] = origTable.emptyEntry
+			entries[i] = origTable.emptyValue
 			bounds[i] = ForbiddenValue
 		}
 
@@ -143,7 +143,7 @@ func (c *RDCompressor) Compress(origTable *Table) (*RDResult, error) {
 			for {
 				isOverlapped := false
 				for _, col := range rInfo.nonEmptyCol {
-					if entries[nextRowDisplacement+col] == origTable.emptyEntry {
+					if entries[nextRowDisplacement+col] == origTable.emptyValue {
 						continue
 					}
 					nextRowDisplacement++
@@ -169,7 +169,7 @@ func (c *RDCompressor) Compress(origTable *Table) (*RDResult, error) {
 	result := &RDResult{
 		OrigNumOfRows:   origTable.numOfRows,
 		OrigNumOfCols:   origTable.numOfCols,
-		EmptyEntry:      origTable.emptyEntry,
+		EmptyEntry:      origTable.emptyValue,
 		Entries:         entries[0:resultBottom],
 		Bounds:          bounds[0:resultBottom],
 		RowDisplacement: rowDisplacement,
